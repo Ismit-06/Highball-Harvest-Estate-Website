@@ -117,14 +117,18 @@
             justify-content: center;
             color: var(--white);
             text-align: center;
+            overflow: hidden; /* Added to contain moving background */
         }
         .hero-bg {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            /* Updated dimensions for movement buffer */
+            top: -5%; left: -5%; width: 110%; height: 110%;
             background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=2000');
             background-size: cover;
             background-position: center;
             z-index: -1;
+            /* Smooth movement */
+            transition: transform 0.1s ease-out; 
         }
         .hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -763,9 +767,37 @@
             initAnimations();
         });
 
-        // Toggle Mobile Menu (Simplified Alert)
+        // Toggle Mobile Menu
         function toggleMenu() {
-            alert('Mobile menu toggle');
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
+        }
+        
+        // Hero Mouse Move Effect
+        const heroSection = document.querySelector('.hero');
+        const heroBackground = document.querySelector('.hero-bg');
+
+        if (heroSection && heroBackground) {
+            heroSection.addEventListener('mousemove', (e) => {
+                const { clientX, clientY } = e;
+                const { innerWidth, innerHeight } = window;
+                
+                // Calculate percentage position
+                const xPos = (clientX / innerWidth - 0.5) * 2; // -1 to 1
+                const yPos = (clientY / innerHeight - 0.5) * 2; // -1 to 1
+
+                // Move background in direction of cursor (approx 20px max)
+                const xMove = xPos * 20;
+                const yMove = yPos * 20;
+
+                heroBackground.style.transform = `translate(${xMove}px, ${yMove}px)`;
+            });
         }
     </script>
 </body>
