@@ -5,465 +5,550 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Highball & Harvest | Luxury Hotel</title>
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    stone: { 50: '#fafaf9', 900: '#1c1917' },
-                    amber: { 700: '#b45309' }
-                }
-            }
-        }
-    }
-</script>
-    
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Custom Config -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        serif: ['"Playfair Display"', 'serif'],
-                        sans: ['"Lato"', 'sans-serif'],
-                    },
-                    colors: {
-                        stone: {
-                            50: '#fafaf9',
-                            100: '#f5f5f4',
-                            200: '#e7e5e4',
-                            300: '#d6d3d1',
-                            400: '#a8a29e',
-                            500: '#78716c',
-                            600: '#57534e',
-                            800: '#292524',
-                            900: '#1c1917',
-                        },
-                        amber: {
-                            200: '#fde68a',
-                            400: '#fbbf24',
-                            500: '#f59e0b',
-                            700: '#b45309',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
-        /* Custom Animations */
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .animate-fade-in {
-            animation: fade-in 0.8s ease-out forwards;
+        /* --- CSS VARIABLES (Theme Colors) --- */
+        :root {
+            --stone-50: #fafaf9;
+            --stone-100: #f5f5f4;
+            --stone-200: #e7e5e4;
+            --stone-800: #292524;
+            --stone-900: #1c1917;
+            --amber-500: #f59e0b;
+            --amber-700: #b45309;
+            --white: #ffffff;
+            --text-main: #1c1917;
+            --text-muted: #57534e;
         }
 
-        @keyframes slide-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- GLOBAL RESETS --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Lato', sans-serif; 
+            background-color: var(--stone-50); 
+            color: var(--text-main); 
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
         }
-        .animate-slide-up {
-            animation: slide-up 1s ease-out forwards;
+        h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        
+        /* Updated Image Handling to prevent distortion */
+        img { max-width: 100%; display: block; }
+        .cover-img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- UTILITIES --- */
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .uppercase { text-transform: uppercase; letter-spacing: 0.2em; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .hidden { display: none; }
+        
+        /* Grid Layouts */
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+        .grid-3 { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        
+        @media (min-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+            .desktop-nav { display: flex; gap: 2rem; }
+            .mobile-toggle { display: none; }
+            .contact-layout { display: grid; grid-template-columns: 1fr 1fr; }
         }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-block;
+            padding: 12px 32px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-gold { background: var(--amber-700); color: var(--white); }
+        .btn-gold:hover { background: var(--stone-900); }
+        
+        .btn-white { background: var(--white); color: var(--stone-900); }
+        .btn-white:hover { background: var(--stone-200); }
+
+        .btn-outline { border: 1px solid var(--stone-900); color: var(--stone-900); background: transparent; }
+        .btn-outline:hover { background: var(--stone-900); color: var(--white); }
+
+        .btn-outline-light { border: 1px solid var(--stone-500); color: var(--stone-200); background: transparent; }
+        .btn-outline-light:hover { background: var(--stone-800); }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            padding: 1.5rem 0;
+            transition: 0.3s all;
+        }
+        header.scrolled { background: var(--white); padding: 1rem 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        
+        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; color: var(--white); }
+        header.scrolled .logo { color: var(--stone-900); }
+
+        .nav-link { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--white); cursor: pointer; border: none; background: none; }
+        .nav-link:hover { color: var(--amber-500); }
+        header.scrolled .nav-link { color: var(--stone-900); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-align: center;
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); z-index: -1;
+        }
+        .hero-content h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 2rem; }
+        .hero-subtitle { display: block; margin-bottom: 1rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber-200); }
+
+        /* --- SECTIONS --- */
+        .section-padding { padding: 6rem 0; }
+        .bg-white { background: var(--white); }
+        .bg-dark { background: var(--stone-900); color: var(--stone-200); }
+        
+        .section-title { margin-bottom: 3rem; text-align: center; }
+        .section-title h2 { font-size: 3rem; margin-top: 0.5rem; }
+        .section-title span { color: var(--amber-700); font-size: 0.8rem; font-weight: bold; letter-spacing: 0.2em; text-transform: uppercase; }
+        .divider { height: 4px; width: 80px; background: var(--amber-700); margin: 1.5rem auto 0; }
+
+        /* --- CARDS & GRID ITEMS --- */
+        .room-card { background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: 0.3s; }
+        .room-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .room-img-wrapper { height: 300px; overflow: hidden; position: relative; }
+        .room-content { padding: 2rem; }
+        .room-price { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--amber-700); }
+        
+        .amenity-card { padding: 2rem; background: var(--white); border: 1px solid var(--stone-100); text-align: center; transition: 0.3s; }
+        .amenity-card:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        
+        .menu-item { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 1rem; margin-bottom: 1rem; }
+        .menu-cat { font-size: 0.7rem; text-transform: uppercase; color: var(--amber-500); letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem; }
+        .menu-price { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--amber-500); }
+
+        .hours-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+        .hours-card { background: rgba(255,255,255,0.05); border: 1px solid #333; padding: 1.5rem; text-align: center; }
+
+        /* --- FORM --- */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        input, select, textarea { 
+            width: 100%; padding: 0.75rem; 
+            border: none; border-bottom: 1px solid var(--stone-200); 
+            background: transparent; font-family: inherit; margin-bottom: 1.5rem; 
+        }
+        input:focus, textarea:focus { outline: none; border-bottom-color: var(--amber-700); }
+
+        /* --- FOOTER --- */
+        footer { background: var(--stone-900); color: var(--stone-400); padding: 4rem 0; font-size: 0.9rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; }
+        .footer-brand h2 { color: var(--white); margin-bottom: 1rem; letter-spacing: 0.1em; text-transform: uppercase; }
+        .footer-heading { color: var(--white); text-transform: uppercase; letter-spacing: 0.1em; font-weight: bold; margin-bottom: 1.5rem; font-size: 0.8rem; }
+        .footer-links li { margin-bottom: 0.75rem; }
+        .footer-links button { background: none; border: none; color: inherit; cursor: pointer; text-align: left; padding: 0; }
+        .footer-links button:hover { color: var(--amber-500); }
+
+        /* --- PAGE SWITCHING & ANIMATIONS --- */
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Basic Fade In */
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        .animate-fade-in { animation: fade-in 0.8s ease-out forwards; }
+
+        /* Slide Up */
+        @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide-up { animation: slide-up 1s ease-out forwards; }
         
         .animation-delay-200 { animation-delay: 200ms; }
         .animation-delay-400 { animation-delay: 400ms; }
 
-        /* Hide scrollbar for cleaner look */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        /* Image Helpers */
+        .img-zoom-wrapper { overflow: hidden; height: 100%; position: relative; }
+        .img-zoom-wrapper img { transition: transform 0.7s; width: 100%; height: 100%; object-fit: cover; }
+        .img-zoom-wrapper:hover img { transform: scale(1.1); }
 
-        /* Utility for page switching */
-        .page-section {
-            display: none;
-            min-height: 100vh;
-        }
-        .page-section.active {
-            display: block;
-        }
     </style>
 </head>
-<body class="font-sans bg-stone-50 text-stone-900 selection:bg-amber-200 selection:text-amber-900">
+<body>
 
     <!-- NAVIGATION -->
-    <header id="main-header" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent text-white">
-        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+    <header id="main-header">
+        <div class="container flex justify-between items-center">
+            <div class="logo" onclick="navigateTo('home')">Highball & Harvest</div>
             
-            <!-- Logo -->
-            <div class="cursor-pointer z-50" onclick="navigateTo('home')">
-                <h1 id="logo-text" class="font-serif text-xl md:text-2xl tracking-widest uppercase font-bold text-white transition-colors duration-300">
-                    Highball & Harvest
-                </h1>
-            </div>
-
-            <!-- Desktop Nav -->
-            <nav id="desktop-nav" class="hidden lg:flex items-center gap-8 text-white transition-colors duration-300">
-                <button onclick="navigateTo('home')" class="text-xs uppercase tracking-widest hover:text-amber-500 transition-colors font-medium">Home</button>
-                <button onclick="navigateTo('rooms')" class="text-xs uppercase tracking-widest hover:text-amber-500 transition-colors font-medium">Rooms & Suites</button>
-                <button onclick="navigateTo('dining')" class="text-xs uppercase tracking-widest hover:text-amber-500 transition-colors font-medium">Highball & Harvest</button>
-                <button onclick="navigateTo('amenities')" class="text-xs uppercase tracking-widest hover:text-amber-500 transition-colors font-medium">Amenities</button>
-                <button onclick="navigateTo('gallery')" class="text-xs uppercase tracking-widest hover:text-amber-500 transition-colors font-medium">Gallery</button>
-                <button onclick="navigateTo('events')" class="text-xs uppercase tracking-widest hover:text-amber-500 transition-colors font-medium">Events</button>
-                <button onclick="navigateTo('location')" class="text-xs uppercase tracking-widest hover:text-amber-500 transition-colors font-medium">Location</button>
-                <button onclick="navigateTo('contact')" class="text-xs uppercase tracking-widest hover:text-amber-500 transition-colors font-medium">Contact</button>
-                
-                <button onclick="navigateTo('book')" id="nav-cta" class="px-8 py-3 uppercase tracking-widest text-sm font-medium transition-all duration-300 ease-out bg-amber-700 text-white hover:bg-stone-900">
-                    Book Now
-                </button>
+            <nav class="desktop-nav">
+                <button class="nav-link" onclick="navigateTo('home')">Home</button>
+                <button class="nav-link" onclick="navigateTo('rooms')">Rooms</button>
+                <button class="nav-link" onclick="navigateTo('dining')">Dining</button>
+                <button class="nav-link" onclick="navigateTo('amenities')">Amenities</button>
+                <button class="nav-link" onclick="navigateTo('events')">Events</button>
+                <button class="nav-link" onclick="navigateTo('location')">Location</button>
+                <button class="nav-link" onclick="navigateTo('contact')">Contact</button>
+                <button class="btn btn-gold" id="nav-cta" onclick="navigateTo('book')">Book Now</button>
             </nav>
 
-            <!-- Mobile Menu Toggle -->
-            <button class="lg:hidden z-50 text-white transition-colors duration-300" id="menu-btn" onclick="toggleMenu()">
-                <i data-lucide="menu" class="w-7 h-7"></i>
-            </button>
+            <button class="mobile-toggle nav-link" onclick="toggleMenu()" style="display: none;">Menu</button> 
         </div>
     </header>
 
-    <!-- MOBILE MENU OVERLAY -->
-    <div id="mobile-menu" class="fixed inset-0 z-40 bg-white hidden items-center justify-center animate-fade-in">
-        <nav class="flex flex-col items-center gap-8">
-            <button onclick="navigateTo('home')" class="font-serif text-3xl text-stone-900 hover:text-amber-700 transition-colors">Home</button>
-            <button onclick="navigateTo('rooms')" class="font-serif text-3xl text-stone-900 hover:text-amber-700 transition-colors">Rooms & Suites</button>
-            <button onclick="navigateTo('dining')" class="font-serif text-3xl text-stone-900 hover:text-amber-700 transition-colors">Dining</button>
-            <button onclick="navigateTo('amenities')" class="font-serif text-3xl text-stone-900 hover:text-amber-700 transition-colors">Amenities</button>
-            <button onclick="navigateTo('gallery')" class="font-serif text-3xl text-stone-900 hover:text-amber-700 transition-colors">Gallery</button>
-            <button onclick="navigateTo('events')" class="font-serif text-3xl text-stone-900 hover:text-amber-700 transition-colors">Events</button>
-            <button onclick="navigateTo('location')" class="font-serif text-3xl text-stone-900 hover:text-amber-700 transition-colors">Location</button>
-            <button onclick="navigateTo('contact')" class="font-serif text-3xl text-stone-900 hover:text-amber-700 transition-colors">Contact</button>
-            <div class="mt-8">
-               <button onclick="navigateTo('book')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-amber-700 text-white hover:bg-stone-900">Book Your Stay</button>
-            </div>
-        </nav>
-    </div>
-
-    <!-- MAIN CONTENT AREA -->
     <main>
-        
         <!-- HOME PAGE -->
         <div id="home" class="page-section active animate-fade-in">
-            <!-- Hero -->
-            <div class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-                <div class="absolute inset-0 bg-cover bg-center bg-fixed transition-transform duration-1000 hover:scale-105"
-                     style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=2000');">
-                    <div class="absolute inset-0 bg-black/40"></div>
-                </div>
-                <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-                    <span class="block mb-4 text-sm md:text-base tracking-[0.3em] uppercase text-amber-200 animate-slide-up">
-                        Welcome to Highball & Harvest
-                    </span>
-                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl mb-8 leading-tight animate-slide-up animation-delay-200">
-                        Southern Hospitality,<br />Redefined.
-                    </h1>
-                    <div class="flex flex-col md:flex-row gap-4 justify-center animate-slide-up animation-delay-400">
-                        <button onclick="navigateTo('book')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-amber-700 text-white hover:bg-stone-900 transition-all">Book Your Stay</button>
-                        <button onclick="navigateTo('dining')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-white text-stone-900 hover:bg-stone-200 transition-all">Explore Dining</button>
+            <div class="hero">
+                <div class="hero-bg"></div>
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <span class="hero-subtitle animate-slide-up">Welcome to Highball & Harvest</span>
+                    <h1 class="animate-slide-up animation-delay-200">Southern Hospitality,<br>Redefined.</h1>
+                    <div class="animate-slide-up animation-delay-400" style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+                        <button class="btn btn-gold" onclick="navigateTo('book')">Book Your Stay</button>
+                        <button class="btn btn-white" onclick="navigateTo('dining')">Explore Dining</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Intro -->
-            <section class="py-24 bg-stone-50 px-6">
-                <div class="max-w-3xl mx-auto text-center">
-                    <p class="font-serif text-2xl md:text-3xl text-stone-800 leading-relaxed">
+            <section class="section-padding" style="background-color: var(--stone-50);">
+                <div class="container text-center reveal" style="max-width: 800px;">
+                    <p style="font-family: 'Playfair Display'; font-size: 1.5rem; color: var(--stone-800);">
                         "A sanctuary where modern luxury meets the warmth of the South. From our farm-to-table dining to our tailored experiences, every detail is crafted for your comfort."
                     </p>
-                    <div class="mt-8">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Signature_sample.svg" alt="Signature" class="h-12 mx-auto opacity-60">
-                    </div>
                 </div>
             </section>
 
-            <!-- Rooms Teaser -->
-            <section class="py-20 bg-white">
-                <div class="max-w-7xl mx-auto px-6">
-                    <div class="mb-12 text-center">
-                        <span class="block mb-3 text-xs font-bold tracking-[0.2em] uppercase text-amber-700">Accommodations</span>
-                        <h2 class="font-serif text-4xl md:text-5xl text-stone-900">Rest in Refinement</h2>
-                        <div class="h-1 w-20 bg-amber-700 mt-6 mx-auto"></div>
+            <!-- Teaser Section -->
+            <section class="section-padding bg-white">
+                <div class="container">
+                    <div class="section-title reveal">
+                        <span>Accommodations</span>
+                        <h2>Rest in Refinement</h2>
+                        <div class="divider"></div>
                     </div>
-                    <div class="grid md:grid-cols-2 gap-12 items-center">
-                        <div class="relative group overflow-hidden">
-                             <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&q=80&w=1000" alt="Suite" class="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="grid-2">
+                        <div class="room-img-wrapper reveal">
+                            <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&q=80&w=1000" alt="Suite" class="cover-img">
                         </div>
-                        <div>
-                            <h3 class="font-serif text-3xl mb-4 text-stone-900">Suites & Guest Rooms</h3>
-                            <p class="text-stone-600 mb-8 leading-relaxed">
-                                Designed with a palette of cream, charcoal, and brushed gold, our rooms offer a serene escape. 
-                                Featuring plush bedding, deep soaking tubs, and private balconies overlooking the estate grounds.
-                            </p>
-                            <button onclick="navigateTo('rooms')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium border border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-all">View All Rooms</button>
+                        <div class="reveal" style="display: flex; flex-direction: column; justify-content: center; transition-delay: 0.2s;">
+                            <h3 style="font-size: 2rem; margin-bottom: 1rem;">Suites & Guest Rooms</h3>
+                            <p style="margin-bottom: 2rem; color: var(--text-muted);">Designed with a palette of cream, charcoal, and brushed gold, our rooms offer a serene escape. Featuring plush bedding and private balconies.</p>
+                            <button class="btn btn-outline" onclick="navigateTo('rooms')">View All Rooms</button>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- H&H Teaser -->
-            <section class="relative py-32 bg-stone-900 text-white overflow-hidden">
-                <div class="absolute inset-0 bg-cover bg-center opacity-30" style="background-image: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=1500');"></div>
-                <div class="relative z-10 max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-                    <div class="order-2 md:order-1">
-                        <h2 class="font-serif text-5xl mb-2 text-amber-500">Highball & Harvest</h2>
-                        <span class="block mb-8 text-sm tracking-widest uppercase text-stone-400">Farm-to-Table • Bourbon Bar</span>
-                        <p class="text-stone-300 text-lg mb-8 leading-relaxed">
-                            The heart of our hotel. Experience true Southern flavor with ingredients harvested from our on-site garden. 
-                            Sip on handcrafted bourbon cocktails in an atmosphere of rustic elegance.
-                        </p>
-                        <button onclick="navigateTo('dining')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-amber-700 text-white hover:bg-stone-900 transition-all">Reserve a Table</button>
-                    </div>
-                    <div class="order-1 md:order-2 grid grid-cols-2 gap-4">
-                        <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&q=80&w=600" class="w-full h-64 object-cover rounded-sm translate-y-8" alt="Cocktail">
-                        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&q=80&w=600" class="w-full h-64 object-cover rounded-sm" alt="Food">
-                    </div>
-                </div>
-            </section>
-
-            <!-- Amenities Teaser -->
-            <section class="py-24 bg-stone-100">
-                <div class="max-w-7xl mx-auto px-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                        <div class="p-8 bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <i data-lucide="sun" class="w-12 h-12 text-amber-700 mx-auto mb-6"></i>
-                            <h3 class="font-serif text-xl mb-4">Resort Pool</h3>
-                            <p class="text-stone-600 text-sm">Private cabanas and poolside service.</p>
-                        </div>
-                        <div class="p-8 bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <i data-lucide="sparkles" class="w-12 h-12 text-amber-700 mx-auto mb-6"></i>
-                            <h3 class="font-serif text-xl mb-4">The Spa</h3>
-                            <p class="text-stone-600 text-sm">Holistic treatments and relaxation lounges.</p>
-                        </div>
-                        <div class="p-8 bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <i data-lucide="wine" class="w-12 h-12 text-amber-700 mx-auto mb-6"></i>
-                            <h3 class="font-serif text-xl mb-4">Concierge</h3>
-                            <p class="text-stone-600 text-sm">Curated local experiences and tours.</p>
-                        </div>
-                    </div>
-                    <div class="text-center mt-12">
-                        <button onclick="navigateTo('amenities')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium border border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-all">Discover More</button>
                     </div>
                 </div>
             </section>
         </div>
 
         <!-- ROOMS PAGE -->
-        <div id="rooms" class="page-section pt-32 pb-20 bg-stone-50 animate-fade-in">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="mb-12 text-center">
-                    <span class="block mb-3 text-xs font-bold tracking-[0.2em] uppercase text-amber-700">Your Private Sanctuary</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-stone-900">Accommodations</h2>
-                    <div class="h-1 w-20 bg-amber-700 mt-6 mx-auto"></div>
+        <div id="rooms" class="page-section section-padding animate-fade-in">
+            <div class="container">
+                <div class="section-title reveal">
+                    <span>Your Private Sanctuary</span>
+                    <h2>Accommodations</h2>
+                    <div class="divider"></div>
                 </div>
-                
-                <div class="grid gap-12" id="rooms-container">
+                <div class="grid-2" style="gap: 4rem;">
                     <!-- Room 1 -->
-                    <div class="bg-white group overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 grid md:grid-cols-2">
-                        <div class="relative overflow-hidden h-64 md:h-auto">
-                            <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&q=80&w=1000" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Room">
-                        </div>
-                        <div class="p-8 md:p-12 flex flex-col justify-center">
-                            <div class="flex justify-between items-baseline mb-4">
-                                <h3 class="font-serif text-2xl md:text-3xl text-stone-900">The Highball Suite</h3>
-                                <span class="font-serif text-xl text-amber-700">$850<span class="text-sm text-stone-400 font-sans">/night</span></span>
+                    <div class="room-card reveal">
+                        <div class="room-img-wrapper"><img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&q=80&w=1000" alt="Suite" class="cover-img"></div>
+                        <div class="room-content">
+                            <div class="flex justify-between items-center" style="margin-bottom: 1rem;">
+                                <h3>The Highball Suite</h3>
+                                <span class="room-price">$850</span>
                             </div>
-                            <p class="text-stone-600 mb-6">Our signature accommodation featuring a wraparound balcony, separate living area, and marble soaking tub.</p>
-                            <div class="flex flex-wrap gap-4 mb-8">
-                                <span class="text-xs uppercase tracking-wider text-stone-500 border-b border-stone-200 pb-1">King Bed</span>
-                                <span class="text-xs uppercase tracking-wider text-stone-500 border-b border-stone-200 pb-1">Ocean View</span>
-                                <span class="text-xs uppercase tracking-wider text-stone-500 border-b border-stone-200 pb-1">Butler Service</span>
-                            </div>
-                            <div class="flex gap-4">
-                                <button onclick="navigateTo('book')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-stone-900 text-white hover:bg-amber-700 transition-all">Check Availability</button>
-                            </div>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Signature accommodation with wraparound balcony.</p>
+                            <button class="btn btn-gold" onclick="navigateTo('book')">Check Availability</button>
                         </div>
                     </div>
                     <!-- Room 2 -->
-                    <div class="bg-white group overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 grid md:grid-cols-2">
-                        <div class="relative overflow-hidden h-64 md:h-auto">
-                            <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=1000" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Room">
-                        </div>
-                        <div class="p-8 md:p-12 flex flex-col justify-center">
-                            <div class="flex justify-between items-baseline mb-4">
-                                <h3 class="font-serif text-2xl md:text-3xl text-stone-900">Harvest King Room</h3>
-                                <span class="font-serif text-xl text-amber-700">$450<span class="text-sm text-stone-400 font-sans">/night</span></span>
+                    <div class="room-card reveal" style="transition-delay: 0.2s;">
+                        <div class="room-img-wrapper"><img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=1000" alt="Room" class="cover-img"></div>
+                        <div class="room-content">
+                            <div class="flex justify-between items-center" style="margin-bottom: 1rem;">
+                                <h3>Harvest King Room</h3>
+                                <span class="room-price">$450</span>
                             </div>
-                            <p class="text-stone-600 mb-6">Warm Southern tones meet modern luxury. Features handcrafted furniture and views of the garden.</p>
-                            <div class="flex flex-wrap gap-4 mb-8">
-                                <span class="text-xs uppercase tracking-wider text-stone-500 border-b border-stone-200 pb-1">King Bed</span>
-                                <span class="text-xs uppercase tracking-wider text-stone-500 border-b border-stone-200 pb-1">Garden View</span>
-                                <span class="text-xs uppercase tracking-wider text-stone-500 border-b border-stone-200 pb-1">Rain Shower</span>
-                            </div>
-                            <div class="flex gap-4">
-                                <button onclick="navigateTo('book')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-stone-900 text-white hover:bg-amber-700 transition-all">Check Availability</button>
-                            </div>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Warm Southern tones meet modern luxury.</p>
+                            <button class="btn btn-gold" onclick="navigateTo('book')">Check Availability</button>
                         </div>
                     </div>
-                    <!-- Room 3 -->
-                    <div class="bg-white group overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 grid md:grid-cols-2">
-                        <div class="relative overflow-hidden h-64 md:h-auto">
-                            <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=1000" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Room">
-                        </div>
-                        <div class="p-8 md:p-12 flex flex-col justify-center">
-                            <div class="flex justify-between items-baseline mb-4">
-                                <h3 class="font-serif text-2xl md:text-3xl text-stone-900">Veranda Double Queen</h3>
-                                <span class="font-serif text-xl text-amber-700">$520<span class="text-sm text-stone-400 font-sans">/night</span></span>
-                            </div>
-                            <p class="text-stone-600 mb-6">Perfect for families, offering two queen beds and a private terrace overlooking the pool.</p>
-                            <div class="flex flex-wrap gap-4 mb-8">
-                                <span class="text-xs uppercase tracking-wider text-stone-500 border-b border-stone-200 pb-1">2 Queen Beds</span>
-                                <span class="text-xs uppercase tracking-wider text-stone-500 border-b border-stone-200 pb-1">Pool View</span>
-                                <span class="text-xs uppercase tracking-wider text-stone-500 border-b border-stone-200 pb-1">Private Terrace</span>
-                            </div>
-                            <div class="flex gap-4">
-                                <button onclick="navigateTo('book')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-stone-900 text-white hover:bg-amber-700 transition-all">Check Availability</button>
-                            </div>
-                        </div>
+                </div>
+
+                <!-- ADDED ROOM DETAIL IMAGES -->
+                <div class="grid-3 reveal" style="margin-top: 4rem;">
+                    <div class="img-zoom-wrapper" style="height: 250px;">
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=800" alt="Room Detail 1" class="cover-img">
+                    </div>
+                    <div class="img-zoom-wrapper" style="height: 250px; transition-delay: 0.1s;">
+                        <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&q=80&w=800" alt="Room Detail 2" class="cover-img">
+                    </div>
+                    <div class="img-zoom-wrapper" style="height: 250px; transition-delay: 0.2s;">
+                        <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&q=80&w=800" alt="Room Detail 3" class="cover-img">
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- DINING PAGE -->
-        <div id="dining" class="page-section bg-[#1a1818] min-h-screen text-stone-200 animate-fade-in">
-            <div class="relative h-[70vh] flex items-center justify-center">
-                <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2000');"></div>
-                <div class="relative z-10 text-center px-4">
-                    <div class="border border-amber-700/50 p-8 md:p-12 bg-black/40 backdrop-blur-sm">
-                        <h1 class="font-serif text-5xl md:text-7xl text-amber-500 mb-4">Highball & Harvest</h1>
-                        <p class="text-lg uppercase tracking-[0.3em] text-stone-300">Modern Southern Dining</p>
-                    </div>
+        <div id="dining" class="page-section bg-dark animate-fade-in">
+            <div class="hero" style="min-height: 50vh;">
+                <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2000'); opacity: 0.4;"></div>
+                <div class="hero-content">
+                    <h1 class="animate-slide-up">Highball & Harvest</h1>
+                    <span class="hero-subtitle animate-slide-up animation-delay-200">Modern Southern Dining</span>
                 </div>
             </div>
 
-            <div class="max-w-5xl mx-auto px-6 py-24">
-                <div class="grid md:grid-cols-2 gap-16 mb-24 items-center">
+            <div class="container section-padding">
+                <div class="section-title reveal">
+                    <span style="color: var(--amber-500);">Operating Hours</span>
+                    <h2 style="color: var(--white);">When to Dine</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="hours-grid reveal">
+                    <div class="hours-card">
+                        <h3>Breakfast</h3>
+                        <p>Daily: 7:00am - 11:00am</p>
+                    </div>
+                    <div class="hours-card">
+                        <h3>Lunch</h3>
+                        <p>Daily: 11:30am - 2:30pm</p>
+                    </div>
+                    <div class="hours-card">
+                        <h3>Dinner</h3>
+                        <p>Daily: 5:30pm - 10:00pm</p>
+                    </div>
+                </div>
+
+                <div class="grid-2 reveal" style="margin-top: 4rem;">
                     <div>
-                        <h2 class="font-serif text-3xl text-amber-500 mb-6">Field to Fork</h2>
-                        <p class="text-stone-400 leading-relaxed mb-6">
-                            We believe the best ingredients are the ones grown right here. Our menu is a celebration of the season, 
-                            featuring heirloom vegetables from our on-site garden and locally sourced proteins from our partner farms.
-                        </p>
-                        <p class="text-stone-400 leading-relaxed italic">
-                            "Authentic flavors, unpretentious presentation, and a stiff drink to wash it down."
-                        </p>
+                        <h2 style="color: var(--amber-500); margin-bottom: 1rem;">Menu Highlights</h2>
+                        <div class="menu-item">
+                            <div><span class="menu-cat">Breakfast</span> <span>Southern Benedict</span></div>
+                            <span class="menu-price">$24</span>
+                        </div>
+                        <div class="menu-item">
+                            <div><span class="menu-cat">Lunch</span> <span>Harvest Cobb</span></div>
+                            <span class="menu-price">$22</span>
+                        </div>
+                        <div class="menu-item">
+                            <div><span class="menu-cat">Dinner</span> <span>Braised Short Rib</span></div>
+                            <span class="menu-price">$48</span>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <img src="https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&q=80&w=500" class="rounded-sm opacity-80" alt="Garden">
-                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=500" class="rounded-sm opacity-80 translate-y-8" alt="Plating">
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border: 1px solid #444; padding: 2rem; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://images.unsplash.com/photo-1550966871-3ed3c47e2ce2?auto=format&fit=crop&q=80&w=800') center/cover; opacity: 0.1;"></div>
+                        <div style="position: relative; z-index: 1;">
+                            <i data-lucide="users" style="width: 48px; height: 48px; color: var(--amber-700); margin-bottom: 1rem;"></i>
+                            <h3>Private Events</h3>
+                            <p style="color: #aaa; margin-bottom: 2rem;">From whiskey tastings to full buy-outs.</p>
+                            <button class="btn btn-outline-light" onclick="navigateTo('events')">Inquire Now</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mb-24">
-                    <div class="text-center mb-12">
-                        <h2 class="font-serif text-4xl mb-4 text-white">Selections</h2>
-                        <div class="h-0.5 w-12 bg-amber-700 mx-auto"></div>
+                <!-- Culinary Images (Added) -->
+                <div class="grid-3 reveal" style="margin-top: 4rem;">
+                    <div class="img-zoom-wrapper" style="height: 300px;">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=800" alt="Entree" class="cover-img">
                     </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-x-12 gap-y-8">
-                        <!-- Menu Items -->
-                        <div class="flex justify-between items-start border-b border-stone-800 pb-4">
-                            <div>
-                                <span class="text-xs text-amber-600 uppercase tracking-widest block mb-1">Breakfast</span>
-                                <h3 class="font-serif text-xl text-stone-100">Southern Benedict</h3>
-                                <p class="text-sm text-stone-500 mt-1">Green tomato, pork belly, hollandaise, biscuit</p>
-                            </div>
-                            <span class="font-serif text-lg text-amber-500">$24</span>
-                        </div>
-                        <div class="flex justify-between items-start border-b border-stone-800 pb-4">
-                            <div>
-                                <span class="text-xs text-amber-600 uppercase tracking-widest block mb-1">Lunch</span>
-                                <h3 class="font-serif text-xl text-stone-100">Harvest Cobb</h3>
-                                <p class="text-sm text-stone-500 mt-1">Local greens, heirloom egg, avocado, house bacon</p>
-                            </div>
-                            <span class="font-serif text-lg text-amber-500">$22</span>
-                        </div>
-                        <div class="flex justify-between items-start border-b border-stone-800 pb-4">
-                            <div>
-                                <span class="text-xs text-amber-600 uppercase tracking-widest block mb-1">Dinner</span>
-                                <h3 class="font-serif text-xl text-stone-100">Braised Short Rib</h3>
-                                <p class="text-sm text-stone-500 mt-1">Anson Mills grits, roasted root vegetables, jus</p>
-                            </div>
-                            <span class="font-serif text-lg text-amber-500">$48</span>
-                        </div>
-                        <div class="flex justify-between items-start border-b border-stone-800 pb-4">
-                            <div>
-                                <span class="text-xs text-amber-600 uppercase tracking-widest block mb-1">Cocktails</span>
-                                <h3 class="font-serif text-xl text-stone-100">The Last Word</h3>
-                                <p class="text-sm text-stone-500 mt-1">Gin, Green Chartreuse, Maraschino, Lime</p>
-                            </div>
-                            <span class="font-serif text-lg text-amber-500">$18</span>
-                        </div>
+                    <div class="img-zoom-wrapper" style="height: 300px; transition-delay: 0.1s;">
+                        <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=800" alt="Cocktail" class="cover-img">
                     </div>
-                    
-                    <div class="text-center mt-12">
-                        <button onclick="navigateTo('book')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-amber-700 text-white hover:bg-stone-900 transition-all">Make a Reservation</button>
+                    <div class="img-zoom-wrapper" style="height: 300px; transition-delay: 0.2s;">
+                        <img src="https://images.unsplash.com/photo-1546241072-48010ad2862c?auto=format&fit=crop&q=80&w=800" alt="Steak" class="cover-img">
                     </div>
-                </div>
-
-                <div class="bg-stone-900 p-12 text-center border border-stone-800">
-                    <i data-lucide="users" class="w-12 h-12 text-amber-700 mx-auto mb-6"></i>
-                    <h3 class="font-serif text-2xl mb-4 text-white">Private Dining & Events</h3>
-                    <p class="text-stone-400 max-w-2xl mx-auto mb-8">
-                        From intimate Whiskey tastings in our cellar to full buy-outs for wedding receptions. 
-                        Host your next event with Southern flair.
-                    </p>
-                    <button onclick="navigateTo('events')" class="px-8 py-3 uppercase tracking-widest text-sm font-medium border border-stone-600 text-stone-300 hover:bg-stone-800 transition-all">Inquire Now</button>
                 </div>
             </div>
         </div>
 
         <!-- AMENITIES PAGE -->
-        <div id="amenities" class="page-section pt-32 pb-20 bg-stone-50 animate-fade-in">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="mb-12 text-center">
-                    <span class="block mb-3 text-xs font-bold tracking-[0.2em] uppercase text-amber-700">Curated For You</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-stone-900">Hotel Amenities</h2>
-                    <div class="h-1 w-20 bg-amber-700 mt-6 mx-auto"></div>
+        <div id="amenities" class="page-section section-padding animate-fade-in">
+            <div class="container">
+                <!-- Added Hero Image for Amenities -->
+                <div class="img-zoom-wrapper reveal" style="height: 400px; margin-bottom: 4rem; border-radius: 4px;">
+                    <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=1500" alt="Wellness and Spa" class="cover-img">
+                    <div style="position: absolute; bottom: 2rem; left: 2rem; color: white; background: rgba(0,0,0,0.5); padding: 1rem 2rem;">
+                        <h2 style="margin: 0; font-size: 2rem;">Wellness & Recreation</h2>
+                    </div>
                 </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="bg-white p-8 border border-stone-100 shadow-sm hover:shadow-md transition-all">
-                        <i data-lucide="sun" class="w-8 h-8 text-amber-700 mb-4"></i>
-                        <h3 class="font-serif text-xl mb-2 text-stone-900">Infinity Pool</h3>
-                        <p class="text-stone-600 text-sm">Heated year-round with poolside bar service.</p>
+
+                <div class="section-title reveal">
+                    <span>Curated For You</span>
+                    <h2>Hotel Amenities</h2>
+                    <div class="divider"></div>
+                </div>
+                <div class="grid-3">
+                    <div class="amenity-card reveal">
+                        <i data-lucide="sun" style="color: var(--amber-700); width: 32px; height: 32px; margin-bottom: 1rem;"></i>
+                        <h3>Infinity Pool</h3>
+                        <p>Heated year-round.</p>
                     </div>
-                    <div class="bg-white p-8 border border-stone-100 shadow-sm hover:shadow-md transition-all">
-                        <i data-lucide="sparkles" class="w-8 h-8 text-amber-700 mb-4"></i>
-                        <h3 class="font-serif text-xl mb-2 text-stone-900">Full-Service Spa</h3>
-                        <p class="text-stone-600 text-sm">Organic treatments inspired by nature.</p>
+                    <div class="amenity-card reveal" style="transition-delay: 0.1s;">
+                        <i data-lucide="sparkles" style="color: var(--amber-700); width: 32px; height: 32px; margin-bottom: 1rem;"></i>
+                        <h3>Full-Service Spa</h3>
+                        <p>Organic treatments.</p>
                     </div>
-                    <div class="bg-white p-8 border border-stone-100 shadow-sm hover:shadow-md transition-all">
-                        <i data-lucide="users" class="w-8 h-8 text-amber-700 mb-4"></i>
-                        <h3 class="font-serif text-xl mb-2 text-stone-900">Fitness Studio</h3>
-                        <p class="text-stone-600 text-sm">24/7 access with Peloton bikes and yoga deck.</p>
+                    <div class="amenity-card reveal" style="transition-delay: 0.2s;">
+                        <i data-lucide="wifi" style="color: var(--amber-700); width: 32px; height: 32px; margin-bottom: 1rem;"></i>
+                        <h3>High-Speed Wifi</h3>
+                        <p>Connectivity everywhere.</p>
                     </div>
-                    <div class="bg-white p-8 border border-stone-100 shadow-sm hover:shadow-md transition-all">
-                        <i data-lucide="coffee" class="w-8 h-8 text-amber-700 mb-4"></i>
-                        <h3 class="font-serif text-xl mb-2 text-stone-900">Morning Bar</h3>
-                        <p class="text-stone-600 text-sm">Complimentary artisan coffee in the lobby.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVENTS PAGE -->
+        <div id="events" class="page-section section-padding animate-fade-in">
+            <div class="container" style="max-width: 900px;">
+                <div class="section-title reveal">
+                    <span>Weddings & Events</span>
+                    <h2>Gatherings</h2>
+                    <div class="divider"></div>
+                </div>
+                
+                <!-- Images Grid -->
+                <div class="grid-3 reveal" style="gap: 10px; margin-bottom: 2rem;">
+                    <div class="img-zoom-wrapper" style="height: 200px;">
+                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=800" alt="Wedding" class="cover-img">
                     </div>
-                    <div class="bg-white p-8 border border-stone-100 shadow-sm hover:shadow-md transition-all">
-                        <i data-lucide="wifi" class="w-8 h-8 text-amber-700 mb-4"></i>
-                        <h3 class="font-serif text-xl mb-2 text-stone-900">High-Speed Wi-Fi</h3>
-                        <p class="text-stone-600 text-sm">Connectivity throughout the estate.</p>
+                    <div class="img-zoom-wrapper" style="height: 200px; transition-delay: 0.1s;">
+                        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=800" alt="Dining" class="cover-img">
                     </div>
-                    <div class="bg-white p-8 border border-stone-100 shadow-sm hover:shadow-md transition-all">
-                        <i data-lucide="arrow-right" class="w-8 h-8 text-amber-700 mb-4"></i>
-                        <h3 class="font-serif text-xl mb-2 text-stone-900">Valet Parking</h3>
-                        <p class="text-stone-600 text-sm">24-hour secure parking service.</p>
+                    <div class="img-zoom-wrapper" style="height: 200px; transition-delay: 0.2s;">
+                        <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&q=80&w=800" alt="Reception" class="cover-img">
+                    </div>
+                </div>
+
+                <div class="bg-white reveal" style="padding: 3rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                    <h3>Start Planning</h3>
+                    <p style="margin-bottom: 2rem; color: var(--text-muted);">Contact us to plan your perfect event.</p>
+                    <form>
+                        <div class="form-grid">
+                            <input type="text" placeholder="First Name">
+                            <input type="text" placeholder="Last Name">
+                        </div>
+                        <input type="email" placeholder="Email Address">
+                        <div class="form-grid">
+                            <input type="text" placeholder="Event Type">
+                            <input type="text" placeholder="Guest Count">
+                        </div>
+                        <textarea placeholder="Tell us about your event..." style="height: 100px;"></textarea>
+                        <button type="button" class="btn btn-gold">Submit Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOCATION PAGE -->
+        <div id="location" class="page-section section-padding animate-fade-in">
+            <div class="container">
+                <div class="grid-2">
+                    <div class="reveal">
+                        <div class="section-title text-left">
+                            <span>Discover</span>
+                            <h2>The Neighborhood</h2>
+                            <div class="divider" style="margin: 1.5rem 0;"></div>
+                        </div>
+                        <p style="margin-bottom: 2rem;">Located in the heart of the historic district.</p>
+                        <ul>
+                            <li class="flex items-center" style="margin-bottom: 1rem;">
+                                <i data-lucide="map-pin" style="color: var(--amber-700); margin-right: 1rem;"></i>
+                                <span>4012 Central Florida Parkway, Orlando, FL, 32837</span>
+                            </li>
+                            <li class="flex items-center" style="margin-bottom: 1rem;">
+                                <i data-lucide="phone" style="color: var(--amber-700); margin-right: 1rem;"></i>
+                                <span>407-393-4422</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="mail" style="color: var(--amber-700); margin-right: 1rem;"></i>
+                                <span>mcorzhighballandharvest@marriott.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Updated Map Image -->
+                    <div class="reveal" style="height: 400px; display: flex; align-items: center; justify-content: center; transition-delay: 0.2s; overflow: hidden; position: relative;">
+                        <img src="https://images.unsplash.com/photo-1605723517503-3cadb5818a0c?auto=format&fit=crop&q=80&w=1000" alt="Orlando" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; bottom: 20px; left: 20px; background: white; padding: 10px 20px; font-weight: bold; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;">Map & Directions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE -->
+        <div id="contact" class="page-section section-padding animate-fade-in">
+            <div class="container" style="max-width: 1000px;">
+                <div class="section-title reveal">
+                    <span>Contact Us</span>
+                    <h2>Get in Touch</h2>
+                    <div class="divider"></div>
+                </div>
+                <!-- Updated Layout with Image -->
+                <div class="contact-layout reveal" style="background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden;">
+                    <div style="display: none; height: 100%;">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800" alt="Hotel Lobby" style="height: 100%; width: 100%; object-fit: cover;">
+                    </div>
+                    <!-- Inline style override for desktop layout is handled by CSS class .contact-layout -->
+                    <style>
+                        @media (min-width: 768px) {
+                            .contact-image { display: block !important; }
+                        }
+                    </style>
+                    <div class="contact-image" style="display: none;">
+                         <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800" alt="Hotel Lobby" class="cover-img">
+                    </div>
+
+                    <div style="padding: 3rem;">
+                        <form>
+                            <div class="form-grid">
+                                <input type="text" placeholder="Name">
+                                <input type="text" placeholder="Subject">
+                            </div>
+                            <input type="email" placeholder="Email">
+                            <textarea placeholder="Message" style="height: 150px;"></textarea>
+                            <button type="button" class="btn btn-gold" style="width: 100%;">Send Message</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -496,383 +581,192 @@
                     <div class="relative group overflow-hidden aspect-[4/5] cursor-pointer">
                         <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" alt="Gallery">
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- EVENTS PAGE -->
-        <div id="events" class="page-section pt-32 pb-20 bg-stone-50 animate-fade-in">
-            <div class="max-w-4xl mx-auto px-6">
-                <div class="mb-12 text-center">
-                    <span class="block mb-3 text-xs font-bold tracking-[0.2em] uppercase text-amber-700">Weddings & Events</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-stone-900">Gatherings</h2>
-                    <div class="h-1 w-20 bg-amber-700 mt-6 mx-auto"></div>
-                </div>
-                <div class="bg-white p-8 md:p-12 shadow-lg mb-12">
-                    <img src="https://images.unsplash.com/photo-1519225468359-2996bc01c083?auto=format&fit=crop&q=80&w=1200" alt="Wedding" class="w-full h-64 object-cover mb-8">
-                    <h3 class="font-serif text-2xl text-stone-900 mb-4">A Backdrop for Memories</h3>
-                    <p class="text-stone-600 mb-8">
-                        Whether it's a grand wedding on the Great Lawn or a corporate retreat in the Harvest Room, 
-                        our team provides impeccable service and tailored menus to make your event unforgettable.
-                    </p>
-                    
-                    <form class="space-y-6">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <input type="text" placeholder="First Name" class="w-full border-b border-stone-300 py-2 focus:outline-none focus:border-amber-700 bg-transparent">
-                            <input type="text" placeholder="Last Name" class="w-full border-b border-stone-300 py-2 focus:outline-none focus:border-amber-700 bg-transparent">
-                        </div>
-                        <input type="email" placeholder="Email Address" class="w-full border-b border-stone-300 py-2 focus:outline-none focus:border-amber-700 bg-transparent">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <input type="text" placeholder="Event Type" class="w-full border-b border-stone-300 py-2 focus:outline-none focus:border-amber-700 bg-transparent">
-                            <input type="text" placeholder="Estimated Guest Count" class="w-full border-b border-stone-300 py-2 focus:outline-none focus:border-amber-700 bg-transparent">
-                        </div>
-                        <textarea placeholder="Tell us about your event..." class="w-full border-b border-stone-300 py-2 focus:outline-none focus:border-amber-700 bg-transparent h-24"></textarea>
-                        <button type="button" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-stone-900 text-white hover:bg-amber-700 transition-all">Submit Inquiry</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- LOCATION PAGE -->
-        <div id="location" class="page-section pt-32 pb-20 bg-stone-50 animate-fade-in">
-            <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12">
-                <div>
-                    <div class="mb-12 text-left">
-                        <span class="block mb-3 text-xs font-bold tracking-[0.2em] uppercase text-amber-700">Discover</span>
-                        <h2 class="font-serif text-4xl md:text-5xl text-stone-900">The Neighborhood</h2>
-                        <div class="h-1 w-20 bg-amber-700 mt-6"></div>
+                    <!-- Added 3 More Images -->
+                    <div class="relative group overflow-hidden aspect-[4/5] cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" alt="Gallery">
                     </div>
-                    <p class="text-stone-600 mb-8 leading-relaxed">
-                        Located in the heart of the historic district, Highball & Harvest is steps away from the city's best culture, shopping, and entertainment. 
-                        Yet, tucked away behind our gates, you'll feel miles away from the hustle.
-                    </p>
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-center text-stone-700">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-amber-700 mr-3"></i>
-                            <span>1200 Heritage Blvd, Charleston, SC 29403</span>
-                        </li>
-                        <li class="flex items-center text-stone-700">
-                            <i data-lucide="phone" class="w-5 h-5 text-amber-700 mr-3"></i>
-                            <span>+1 (843) 555-0199</span>
-                        </li>
-                        <li class="flex items-center text-stone-700">
-                            <i data-lucide="mail" class="w-5 h-5 text-amber-700 mr-3"></i>
-                            <span>concierge@highballandharvest.com</span>
-                        </li>
-                    </ul>
-                    <h4 class="font-serif text-lg mb-4 text-stone-900">Nearby Experiences</h4>
-                    <ul class="space-y-2 text-stone-600 text-sm">
-                        <li>• Historic City Market (0.5 miles)</li>
-                        <li>• Waterfront Park (0.8 miles)</li>
-                        <li>• King Street Shopping (0.2 miles)</li>
-                        <li>• The Battery (1.2 miles)</li>
-                    </ul>
-                </div>
-                <div class="h-96 md:h-auto bg-stone-200 relative">
-                    <div class="absolute inset-0 bg-stone-300 flex items-center justify-center">
-                        <span class="text-stone-500 font-serif tracking-widest uppercase">Interactive Map Loading...</span>
+                    <div class="relative group overflow-hidden aspect-[4/5] cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1571896349842-68c8949139f1?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" alt="Gallery">
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CONTACT PAGE -->
-        <div id="contact" class="page-section pt-32 pb-20 bg-stone-50 animate-fade-in">
-            <div class="max-w-3xl mx-auto px-6 text-center">
-                <div class="mb-12 text-center">
-                    <span class="block mb-3 text-xs font-bold tracking-[0.2em] uppercase text-amber-700">Contact Us</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-stone-900">Get in Touch</h2>
-                    <div class="h-1 w-20 bg-amber-700 mt-6 mx-auto"></div>
-                </div>
-                <p class="text-stone-600 mb-12">
-                    We look forward to welcoming you. For immediate assistance, please call the front desk.
-                </p>
-                <div class="bg-white p-12 shadow-md">
-                    <form class="space-y-6 text-left">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-xs uppercase tracking-wider text-stone-500 mb-1">Name</label>
-                                <input type="text" class="w-full bg-stone-50 border border-stone-200 p-3 focus:border-amber-700 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs uppercase tracking-wider text-stone-500 mb-1">Subject</label>
-                                <input type="text" class="w-full bg-stone-50 border border-stone-200 p-3 focus:border-amber-700 focus:outline-none">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-stone-500 mb-1">Email</label>
-                            <input type="email" class="w-full bg-stone-50 border border-stone-200 p-3 focus:border-amber-700 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-stone-500 mb-1">Message</label>
-                            <textarea class="w-full bg-stone-50 border border-stone-200 p-3 h-32 focus:border-amber-700 focus:outline-none"></textarea>
-                        </div>
-                        <div class="text-center">
-                            <button type="button" class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-stone-900 text-white hover:bg-amber-700 transition-all">Send Message</button>
-                        </div>
-                    </form>
+                    <div class="relative group overflow-hidden aspect-[4/5] cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1616047006789-b7af5afb8c20?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" alt="Gallery">
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- BOOKING PAGE -->
-        <div id="book" class="page-section pt-32 pb-20 bg-stone-100 animate-fade-in">
-            <div class="max-w-4xl mx-auto px-6">
-                <div class="mb-12 text-center">
-                    <span class="block mb-3 text-xs font-bold tracking-[0.2em] uppercase text-amber-700">Booking</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-stone-900">Reserve Your Stay</h2>
-                    <div class="h-1 w-20 bg-amber-700 mt-6 mx-auto"></div>
+        <div id="book" class="page-section section-padding bg-stone-100 animate-fade-in">
+            <div class="container" style="max-width: 900px;">
+                <div class="section-title reveal">
+                    <span>Booking</span>
+                    <h2>Reserve Your Stay</h2>
+                    <div class="divider"></div>
                 </div>
-                
-                <div class="bg-white shadow-xl overflow-hidden rounded-sm">
-                    <div class="bg-stone-900 text-white p-6 flex justify-between items-center">
-                        <span class="uppercase tracking-widest text-sm text-amber-500">Best Rate Guarantee</span>
-                        <span class="font-serif italic">Highball & Harvest</span>
+                <div class="bg-white reveal" style="box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <div class="bg-dark" style="padding: 1.5rem; display: flex; justify-content: space-between;">
+                        <span style="color: var(--amber-500); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em;">Best Rate Guarantee</span>
+                        <span style="font-family: 'Playfair Display'; font-style: italic;">Highball & Harvest</span>
                     </div>
-                    
-                    <div class="p-8 md:p-12">
-                        <div class="grid md:grid-cols-3 gap-6 mb-8">
-                            <div class="space-y-2">
-                                <label class="text-xs font-bold uppercase tracking-wider text-stone-500">Check In</label>
-                                <div class="flex items-center border border-stone-200 p-3">
-                                    <i data-lucide="calendar" class="w-5 h-5 text-stone-400 mr-2"></i>
-                                    <input type="date" class="bg-transparent focus:outline-none w-full text-stone-800">
-                                </div>
+                    <div style="padding: 3rem;">
+                        <div class="grid-3" style="margin-bottom: 2rem;">
+                            <div>
+                                <label style="font-weight: bold; font-size: 0.8rem; text-transform: uppercase;">Check In</label>
+                                <input type="date">
                             </div>
-                            <div class="space-y-2">
-                                <label class="text-xs font-bold uppercase tracking-wider text-stone-500">Check Out</label>
-                                <div class="flex items-center border border-stone-200 p-3">
-                                    <i data-lucide="calendar" class="w-5 h-5 text-stone-400 mr-2"></i>
-                                    <input type="date" class="bg-transparent focus:outline-none w-full text-stone-800">
-                                </div>
+                            <div>
+                                <label style="font-weight: bold; font-size: 0.8rem; text-transform: uppercase;">Check Out</label>
+                                <input type="date">
                             </div>
-                            <div class="space-y-2">
-                                <label class="text-xs font-bold uppercase tracking-wider text-stone-500">Guests</label>
-                                <div class="flex items-center border border-stone-200 p-3">
-                                    <i data-lucide="users" class="w-5 h-5 text-stone-400 mr-2"></i>
-                                    <select class="bg-transparent focus:outline-none w-full text-stone-800">
-                                        <option>1 Adult</option>
-                                        <option>2 Adults</option>
-                                        <option>2 Adults, 1 Child</option>
-                                        <option>Family</option>
-                                    </select>
-                                </div>
+                            <div>
+                                <label style="font-weight: bold; font-size: 0.8rem; text-transform: uppercase;">Guests</label>
+                                <select><option>2 Adults</option><option>Family</option></select>
                             </div>
                         </div>
-
-                        <div class="border-t border-stone-100 pt-8 mb-8">
-                            <h4 class="font-serif text-xl mb-6">Select Room Category</h4>
-                            <!-- Selection Items Mockup -->
-                            <div class="flex justify-between items-center border border-stone-200 p-4 mb-4 hover:border-amber-700 cursor-pointer transition-colors">
-                                <div class="flex items-center">
-                                    <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&q=80&w=1000" class="w-16 h-16 object-cover mr-4" alt="Thumb">
-                                    <div>
-                                        <h5 class="font-serif text-lg">The Highball Suite</h5>
-                                        <span class="text-xs text-stone-500">1,200 sq ft</span>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="block font-serif text-lg text-amber-700">$850</span>
-                                    <button class="text-xs uppercase font-bold text-stone-900 underline">Select</button>
-                                </div>
-                            </div>
-                             <div class="flex justify-between items-center border border-stone-200 p-4 mb-4 hover:border-amber-700 cursor-pointer transition-colors">
-                                <div class="flex items-center">
-                                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=1000" class="w-16 h-16 object-cover mr-4" alt="Thumb">
-                                    <div>
-                                        <h5 class="font-serif text-lg">Harvest King Room</h5>
-                                        <span class="text-xs text-stone-500">550 sq ft</span>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="block font-serif text-lg text-amber-700">$450</span>
-                                    <button class="text-xs uppercase font-bold text-stone-900 underline">Select</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between items-center pt-4">
-                            <span class="text-sm text-stone-500">Taxes and fees calculated at next step</span>
-                            <button class="px-8 py-3 uppercase tracking-widest text-sm font-medium bg-amber-700 text-white hover:bg-stone-900 transition-all">Continue to Payment</button>
+                        <div style="border-top: 1px solid var(--stone-200); padding-top: 2rem; display: flex; justify-content: flex-end;">
+                            <button class="btn btn-gold">Continue to Payment</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-stone-900 text-stone-400 py-16 border-t border-stone-800">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
-            
-            <!-- Brand -->
-            <div class="space-y-4">
-                <h2 class="font-serif text-2xl text-white uppercase tracking-widest">Highball & Harvest</h2>
-                <p class="text-sm leading-relaxed">
-                    Experience the pinnacle of Southern luxury. Where tradition meets modern elegance.
-                </p>
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <h2>Highball & Harvest</h2>
+                <p>Experience the pinnacle of Southern luxury.</p>
             </div>
-
-            <!-- Quick Links -->
             <div>
-                <h3 class="text-white uppercase tracking-widest text-xs font-bold mb-6">Explore</h3>
-                <ul class="space-y-3 text-sm">
-                    <li><button onclick="navigateTo('rooms')" class="hover:text-amber-500">Accommodations</button></li>
-                    <li><button onclick="navigateTo('dining')" class="hover:text-amber-500 text-amber-500 font-bold">Highball & Harvest</button></li>
-                    <li><button onclick="navigateTo('amenities')" class="hover:text-amber-500">Wellness & Spa</button></li>
-                    <li><button onclick="navigateTo('events')" class="hover:text-amber-500">Weddings</button></li>
+                <div class="footer-heading">Explore</div>
+                <ul class="footer-links">
+                    <li><button onclick="navigateTo('rooms')">Accommodations</button></li>
+                    <li><button onclick="navigateTo('dining')">Dining</button></li>
+                    <li><button onclick="navigateTo('events')">Weddings</button></li>
                 </ul>
             </div>
-
-            <!-- Contact -->
             <div>
-                <h3 class="text-white uppercase tracking-widest text-xs font-bold mb-6">Contact</h3>
-                <ul class="space-y-3 text-sm">
-                    <li class="flex items-center"><i data-lucide="phone" class="w-3 h-3 mr-2"></i> 843-555-0199</li>
-                    <li class="flex items-center"><i data-lucide="mail" class="w-3 h-3 mr-2"></i> concierge@highball.com</li>
-                    <li class="flex items-center"><i data-lucide="map-pin" class="w-3 h-3 mr-2"></i> Charleston, SC</li>
+                <div class="footer-heading">Contact</div>
+                <ul class="footer-links">
+                    <li>407-393-4422</li>
+                    <li>4012 Central Florida Parkway</li>
+                    <li>Orlando, FL, 32837</li>
                 </ul>
             </div>
-
-            <!-- Social / Newsletter -->
             <div>
-                 <h3 class="text-white uppercase tracking-widest text-xs font-bold mb-6">Stay Connected</h3>
-                 <div class="flex gap-4 mb-6">
-                   <i data-lucide="instagram" class="w-5 h-5 hover:text-white cursor-pointer"></i>
-                   <i data-lucide="facebook" class="w-5 h-5 hover:text-white cursor-pointer"></i>
-                   <i data-lucide="twitter" class="w-5 h-5 hover:text-white cursor-pointer"></i>
-                 </div>
-                 <div class="flex border-b border-stone-700 pb-2">
-                   <input type="email" placeholder="Email Address" class="bg-transparent focus:outline-none w-full text-sm">
-                   <button class="text-xs uppercase font-bold text-white hover:text-amber-500">Join</button>
-                 </div>
-            </div>
-        </div>
-        
-        <div class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-stone-800 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs">
-            <p>&copy; 2024 Highball & Harvest. All rights reserved.</p>
-            <div class="flex gap-6 mt-4 md:mt-0">
-                <span>Privacy Policy</span>
-                <span>Terms of Service</span>
-                <span>Accessibility</span>
+                <div class="footer-heading">Social</div>
+                <div class="flex" style="gap: 1rem; color: var(--white);">
+                    <i data-lucide="instagram"></i>
+                    <i data-lucide="facebook"></i>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JS LOGIC -->
     <script>
         // Initialize Icons
         lucide.createIcons();
 
-        // Mobile Menu Toggle logic
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuBtn = document.getElementById('menu-btn');
-        let isMenuOpen = false;
-
-        function toggleMenu() {
-            isMenuOpen = !isMenuOpen;
-            if (isMenuOpen) {
-                mobileMenu.classList.remove('hidden');
-                mobileMenu.classList.add('flex');
-            } else {
-                mobileMenu.classList.add('hidden');
-                mobileMenu.classList.remove('flex');
-            }
-        }
-
-        // Navigation Logic (SPA Feel)
+        // 1. Navigation Logic (SPA Feel)
         function navigateTo(pageId) {
             // Hide all pages
             const pages = document.querySelectorAll('.page-section');
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
+            pages.forEach(page => page.classList.remove('active'));
 
             // Show target page
             const target = document.getElementById(pageId);
             if (target) {
                 target.classList.add('active');
                 window.scrollTo(0, 0);
+                
+                // Trigger animations for the new page
+                setTimeout(() => {
+                    initAnimations();
+                }, 100);
             }
 
-            // Close mobile menu if open
-            if (isMenuOpen) {
-                toggleMenu();
-            }
-
-            // Update Header Style based on page
+            // Update Header Style
             updateHeaderStyle(pageId);
         }
 
-        // Header Scroll & Style Logic
-        const header = document.getElementById('main-header');
-        const logoText = document.getElementById('logo-text');
-        const desktopNav = document.getElementById('desktop-nav');
-        const navCta = document.getElementById('nav-cta');
-        const mobileMenuBtn = document.getElementById('menu-btn');
-
         function updateHeaderStyle(pageId) {
-            // Reset to default transparent for Home, Solid for others
+            const header = document.getElementById('main-header');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const logo = document.querySelector('.logo');
+            const cta = document.getElementById('nav-cta');
+
             if (pageId === 'home') {
-                handleScroll(); // Check scroll position to determine style
+                // Home page starts transparent, becomes solid on scroll
+                header.classList.remove('scrolled');
+                logo.style.color = 'var(--white)';
+                navLinks.forEach(l => l.style.color = 'var(--white)');
+                cta.classList.remove('btn-white');
+                cta.classList.add('btn-gold');
             } else {
-                setHeaderSolid();
+                // Other pages always solid
+                header.classList.add('scrolled');
+                logo.style.color = 'var(--stone-900)';
+                navLinks.forEach(l => l.style.color = 'var(--stone-900)');
+                cta.classList.remove('btn-gold');
+                cta.classList.add('btn-white');
+                cta.style.background = 'var(--stone-900)';
+                cta.style.color = 'var(--white)';
             }
         }
 
-        function setHeaderSolid() {
-            header.classList.add('bg-white', 'shadow-md', 'py-4');
-            header.classList.remove('bg-transparent', 'py-6', 'text-white');
+        // 2. Scroll Effect for Home Page
+        window.addEventListener('scroll', function() {
+            const home = document.getElementById('home');
+            const header = document.getElementById('main-header');
             
-            logoText.classList.remove('text-white');
-            logoText.classList.add('text-stone-900');
-
-            desktopNav.classList.remove('text-white');
-            desktopNav.classList.add('text-stone-900');
-
-            navCta.classList.remove('bg-amber-700', 'text-white');
-            navCta.classList.add('bg-stone-900', 'text-white');
-
-            mobileMenuBtn.classList.remove('text-white');
-            mobileMenuBtn.classList.add('text-stone-900');
-        }
-
-        function setHeaderTransparent() {
-            header.classList.remove('bg-white', 'shadow-md', 'py-4');
-            header.classList.add('bg-transparent', 'py-6', 'text-white');
-
-            logoText.classList.add('text-white');
-            logoText.classList.remove('text-stone-900');
-
-            desktopNav.classList.add('text-white');
-            desktopNav.classList.remove('text-stone-900');
-
-            navCta.classList.add('bg-amber-700', 'text-white');
-            navCta.classList.remove('bg-stone-900', 'text-white');
-
-            mobileMenuBtn.classList.add('text-white');
-            mobileMenuBtn.classList.remove('text-stone-900');
-        }
-
-        function handleScroll() {
-            // Only apply scroll effect on Home page
-            const homeSection = document.getElementById('home');
-            if (homeSection.classList.contains('active')) {
+            if (home.classList.contains('active')) {
                 if (window.scrollY > 50) {
-                    setHeaderSolid();
+                    header.classList.add('scrolled');
+                    document.querySelector('.logo').style.color = 'var(--stone-900)';
+                    document.querySelectorAll('.nav-link').forEach(l => l.style.color = 'var(--stone-900)');
                 } else {
-                    setHeaderTransparent();
+                    header.classList.remove('scrolled');
+                    document.querySelector('.logo').style.color = 'var(--white)';
+                    document.querySelectorAll('.nav-link').forEach(l => l.style.color = 'var(--white)');
                 }
             }
+        });
+
+        // 3. Scroll Animation Observer (The Fade-in magic)
+        function initAnimations() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // observer.unobserve(entry.target); // Optional: Run once
+                    }
+                });
+            }, observerOptions);
+
+            // Select all elements with 'reveal' class
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => observer.observe(el));
         }
 
-        window.addEventListener('scroll', handleScroll);
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnimations();
+        });
 
-        // Initial Load
-        updateHeaderStyle('home');
-
+        // Toggle Mobile Menu (Simplified Alert)
+        function toggleMenu() {
+            alert('Mobile menu toggle');
+        }
     </script>
 </body>
-
 </html>
-
